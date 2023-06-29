@@ -3,9 +3,18 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
+    puts params
     @user = User.where(uid: params[:uid])
     if @user.length() == 1
-      render json: { data: @user, status: :ok, message: 'Success' }
+      puts @user[0].id
+      @expenses = Expense.where(user: @user[0].id).all
+      puts @expenses
+
+      data = {user: @user[0], expenses: @expenses}
+
+      puts data
+
+      render json: { data: data, status: :ok, message: 'Success' }
     else
       render json: { status: :not_found, message: 'Not Found' }
     end
@@ -14,7 +23,7 @@ class UsersController < ApplicationController
   # GET /users/1 or /users/1.json
   def show
     puts "hello"
-    @user = User.find(uid: params[:id])
+    @user = User.where(uid: params[:uid])
   end
 
   # GET /users/new
@@ -36,7 +45,8 @@ class UsersController < ApplicationController
       uid: params[:uid],
       pay: params[:pay],
       pay_rate: params[:rate],
-      pay_freq: params[:frequncy],
+      pay_freq: params[:frequency],
+      hours: params[:hours],
     )
 
     begin  # "try" block
