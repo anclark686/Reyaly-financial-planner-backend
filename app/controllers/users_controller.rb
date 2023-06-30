@@ -8,9 +8,17 @@ class UsersController < ApplicationController
     if @user.length() == 1
       puts @user[0].id
       @expenses = Expense.where(user: @user[0].id).all
-      puts @expenses
+      puts @expenses.length
 
-      data = {user: @user[0], expenses: @expenses}
+      expensesList = []
+      for i in @expenses
+        id = i._id.to_s
+        expensesList.append({name: i.name, amount: i.amount, date: i.date, id: id})
+      end
+
+      puts expensesList
+
+      data = {user: @user[0], expenses: expensesList}
 
       puts data
 
@@ -37,9 +45,6 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
-    puts "hello"
-    puts params
-    user_params = 
     @user = User.new(
       username: params[:userName],
       uid: params[:uid],
@@ -47,12 +52,12 @@ class UsersController < ApplicationController
       pay_rate: params[:rate],
       pay_freq: params[:frequency],
       hours: params[:hours],
+      date: params[:date],
     )
 
     begin  # "try" block
       if @user.save
         render json: { status: :ok, message: 'Success', id: "#{@user.id}"}
-        puts @user.id
       else
         render json: { json: @user.errors, status: :unprocessable_entity }
       end

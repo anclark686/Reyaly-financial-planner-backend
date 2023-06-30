@@ -40,25 +40,35 @@ class ExpensesController < ApplicationController
 
   # PATCH/PUT /expenses/1 or /expenses/1.json
   def update
-    respond_to do |format|
-      if @expense.update(expense_params)
-        format.html { redirect_to expense_url(@expense), notice: "Expense was successfully updated." }
-        format.json { render :show, status: :ok, location: @expense }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @expense.errors, status: :unprocessable_entity }
-      end
+    puts params
+    if @expense.update(
+        name: params[:name],
+        amount: params[:amount],
+        date: params[:date],
+        user_id: params[:user_id],
+      )
+      render json: { status: :ok, message: 'Success' }
+    else
+      render json: { json: @expense.errors, status: :unprocessable_entity }
     end
+    
+    # respond_to do |format|
+    #   if @expense.update(expense_params)
+    #     format.html { redirect_to expense_url(@expense), notice: "Expense was successfully updated." }
+    #     format.json { render :show, status: :ok, location: @expense }
+    #   else
+    #     format.html { render :edit, status: :unprocessable_entity }
+    #     format.json { render json: @expense.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # DELETE /expenses/1 or /expenses/1.json
   def destroy
+    puts params
     @expense.destroy
 
-    respond_to do |format|
-      format.html { redirect_to expenses_url, notice: "Expense was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    render json: { status: :ok, message: 'Success'}
   end
 
   private

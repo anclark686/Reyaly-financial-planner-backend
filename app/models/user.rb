@@ -8,6 +8,7 @@ class User
   field :pay_rate, type: String
   field :pay_freq, type: String
   field :hours, type: Integer
+  field :date, type: String
   has_many :expenses, dependent: :delete_all
   accepts_nested_attributes_for :expenses, allow_destroy: true
 
