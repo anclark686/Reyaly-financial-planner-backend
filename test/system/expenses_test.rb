@@ -15,7 +15,7 @@ class ExpensesTest < ApplicationSystemTestCase
     click_on "New expense"
 
     fill_in "Amount", with: @expense.amount
-    fill_in "Due", with: @expense.due
+    fill_in "date", with: @expense.date
     fill_in "Name", with: @expense.name
     fill_in "User", with: @expense.user_id
     click_on "Create Expense"
@@ -29,7 +29,7 @@ class ExpensesTest < ApplicationSystemTestCase
     click_on "Edit this expense", match: :first
 
     fill_in "Amount", with: @expense.amount
-    fill_in "Due", with: @expense.due
+    fill_in "date", with: @expense.date
     fill_in "Name", with: @expense.name
     fill_in "User", with: @expense.user_id
     click_on "Update Expense"

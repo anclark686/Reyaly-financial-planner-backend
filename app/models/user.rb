@@ -9,8 +9,11 @@ class User
   field :pay_freq, type: String
   field :hours, type: Integer
   field :date, type: String
+  field :deductions, type: Integer
   has_many :expenses, dependent: :delete_all
   accepts_nested_attributes_for :expenses, allow_destroy: true
+  has_many :paychecks, dependent: :delete_all
+  accepts_nested_attributes_for :paychecks, allow_destroy: true
 
   def to_s
     "username:#{self.username} - id:#{self._id} - uid:#{self.uid}"
