@@ -169,6 +169,12 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /users/1
+  def download
+    UsersHelper.download_to_excel(params[:data])
+    render json: { status: :ok, message: 'Recieved' }
+  end
+
   # DELETE /users/1 or /users/1.json
   def destroy
     @user.destroy

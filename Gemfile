@@ -44,6 +44,8 @@ gem 'mongoid', '~> 7.3'
 
 gem 'rack-cors'
 
+gem "spreadsheet"
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 

@@ -1,0 +1,59 @@
+{
+  "User Info": {
+    "Pay": "$60 hourly",
+    "Pay Frequency": "bi-weekly",
+    "Paycheck Hours": 80,
+    "No. of Deductions": "$300",
+    "Est. Gross": "$4800",
+    "Est. Take Home": "$3375",
+    "No. Expenses": 8,
+    "Expense Total": 639,
+    "Pay Start Date": "6/30/2023",
+    "Next Payday": "7/14/2023"
+  },
+  "Expenses": [
+    {
+      "name": "something",
+      "amount": 50,
+      "date": 4,
+      "id": "64a8740e25f26775ffd53c96"
+    },
+    {
+      "name": "something else",
+      "amount": 400,
+      "date": 3,
+      "id": "64a8742925f26775ffd53c97"
+    },
+    {
+      "name": "ac something",
+      "amount": 20,
+      "date": 17,
+      "id": "64a89e3625f26775ffd53c98"
+    },
+    {
+      "name": "something new",
+      "amount": 90,
+      "date": 22,
+      "id": "64a89e4925f26775ffd53c99"
+    },
+    {
+      "name": "10",
+      "amount": 10,
+      "date": 10,
+      "id": "64a89e7925f26775ffd53c9a"
+    },
+    {
+      "name": "30",
+      "amount": 30,
+      "date": 30,
+      "id": "64a89e8c25f26775ffd53c9b"
+    },
+    {
+      "name": "25",
+      "amount": 25,
+      "date": 25,
+      "id": "64a8a10b25f26775ffd53c9c"
+    },
+    { "name": "14", "amount": 14, "date": 14, "id": "64a8a17c25f26775ffd53c9d" }
+  ]
+}

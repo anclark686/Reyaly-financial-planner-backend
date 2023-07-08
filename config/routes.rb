@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  resources :paychecks
   resources :users do
+    post "download"
     resources :expenses
+    resources :paychecks
   end
 end
