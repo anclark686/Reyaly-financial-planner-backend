@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  owed: 1.5
+  limit: 1
+  rate: 1.5
+  payment: 1.5
+  user: one
+
+two:
+  owed: 1.5
+  limit: 1
+  rate: 1.5
+  payment: 1.5
+  user: two

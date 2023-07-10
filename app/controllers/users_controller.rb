@@ -14,21 +14,48 @@ class UsersController < ApplicationController
       puts @expenses.length
 
       expensesList = []
-      for i in @expenses
+      for i in @expenses do
         id = i._id.to_s
-        expensesList.append({name: i.name, amount: i.amount, date: i.date, id: id})
+        expensesList.append({
+            name: i.name, 
+            amount: i.amount, 
+            date: i.date, 
+            id: id
+          })
       end
 
       @paychecks = Paycheck.where(user: @user[0].id).all
       puts @paychecks.length
 
       paychecksList = []
-      for i in @paychecks
+      for i in @paychecks do
         id = i._id.to_s
         paychecksList.append({date: i.date, id: id})
       end
 
-      data = {user: @user[0], expenses: expensesList, paychecks: paychecksList}
+      @debts = Debt.where(user: @user[0].id).all
+      puts @debts.length
+
+      debtsList = []
+      for i in @debts do
+        id = i._id.to_s
+        debtsList.append({
+            name: i.name, 
+            type: i.type, 
+            owed: i.owed, 
+            limit: i.limit, 
+            rate: i.rate, 
+            payment: i.payment, 
+            id: id
+          })
+      end
+
+      data = {
+        user: @user[0], 
+        expenses: expensesList, 
+        paychecks: paychecksList,
+        debts: debtsList
+      }
 
       render json: { data: data, status: :ok, message: 'Success' }
     else
@@ -97,7 +124,7 @@ class UsersController < ApplicationController
 
     begin  # "try" block
       if @user.save
-        render json: { status: :ok, message: 'Success', id: "#{@user.id}"}
+        render json: { status: :created, message: 'Success', id: "#{@user.id}"}
       else
         render json: { json: @user.errors, status: :unprocessable_entity }
       end

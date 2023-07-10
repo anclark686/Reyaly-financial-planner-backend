@@ -14,6 +14,8 @@ class User
   accepts_nested_attributes_for :expenses, allow_destroy: true
   has_many :paychecks, dependent: :delete_all
   accepts_nested_attributes_for :paychecks, allow_destroy: true
+  has_many :debts, dependent: :delete_all
+  accepts_nested_attributes_for :debts, allow_destroy: true
 
   def to_s
     "username:#{self.username} - id:#{self._id} - uid:#{self.uid}"

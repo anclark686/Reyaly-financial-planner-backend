@@ -76,6 +76,8 @@ class ExpensesController < ApplicationController
   # POST /expenses or /expenses.json
   def create
     puts params
+    puts 
+    puts expense_params
     @expense = Expense.new(
       name: params[:name],
       amount: params[:amount],
@@ -85,7 +87,7 @@ class ExpensesController < ApplicationController
     puts @expense
 
     if @expense.save
-      render json: { status: :ok, message: 'Success', id: "#{@expense.id}"}
+      render json: { status: :created, message: 'Success', id: "#{@expense.id}"}
       puts @expense.id
     else
       render json: { json: @expense.errors, status: :unprocessable_entity }
