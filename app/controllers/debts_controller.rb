@@ -4,7 +4,6 @@ class DebtsController < ApplicationController
   # GET /debts or /debts.json
   def index
     @debts = Debt.where(user: params[:id]).all
-    puts @debts
   end
 
   # GET /debts/1 or /debts/1.json
@@ -22,10 +21,6 @@ class DebtsController < ApplicationController
 
   # POST /debts or /debts.json
   def create
-    puts params
-    puts
-    puts "hello"
-    puts debt_params
 
     @debt = Debt.new(
       name: params[:name],
@@ -39,7 +34,6 @@ class DebtsController < ApplicationController
 
     if @debt.save
       render json: { status: :created, message: 'Success', id: "#{@debt.id}"}
-      puts @debt.id
     else
       render json: { json: @debt.errors, status: :unprocessable_entity }
     end
@@ -48,8 +42,6 @@ class DebtsController < ApplicationController
 
   # PATCH/PUT /debts/1 or /debts/1.json
   def update
-    puts "hello"
-    puts params
 
     if @debt.update(
         name: params[:name],
@@ -68,8 +60,7 @@ class DebtsController < ApplicationController
 
   # DELETE /debts/1 or /debts/1.json
   def destroy
-    puts "goodbye"
-    puts params
+
     @debt.destroy
 
     render json: { status: :ok, message: 'Success'}

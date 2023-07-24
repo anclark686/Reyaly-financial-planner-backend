@@ -158,4 +158,114 @@ module UsersHelper
 
         book.write "public/#{data_obj[:userInfo][:username]}-expense-info.xls"
     end
+
+    def get_expenses_list(user_id)
+        @expenses = Expense.where(user: user_id).all
+
+        expenses_list = []
+        for i in @expenses do
+            expenses_list.append(clean_expense(i))
+        end
+
+        return expenses_list
+    end
+
+    def get_paychecks_list(user_id)
+        @paychecks = Paycheck.where(user: user_id).all
+
+        paychecks_list = []
+        for i in @paychecks do
+            id = i._id.to_s
+            paychecks_list.append({date: i.date, id: id})
+        end
+
+        return paychecks_list
+    end
+
+    def get_debts_list(user_id)
+        @debts = Debt.where(user: user_id).all
+
+        debts_list = []
+        for i in @debts do
+            id = i._id.to_s
+            debts_list.append({
+                name: i.name, 
+                type: i.type, 
+                owed: i.owed, 
+                limit: i.limit, 
+                rate: i.rate, 
+                payment: i.payment, 
+                id: id
+            })
+        end
+
+        return debts_list
+    end
+
+    def get_accounts_list(user_id)
+        @accounts = Account.where(user: user_id).all
+
+        accounts_list = []
+        for i in @accounts do
+            id = i._id.to_s
+            expenses = i.expenses.map {|x| clean_expense(Expense.find_by(id: x))}
+
+            accounts_list.append({
+                name: i.name,
+                start: i.start,
+                total: i.total,
+                end: i.end,
+                expenses: expenses,
+                id: id
+                })
+        end
+
+        return accounts_list
+    end
+
+    def clean_expense(expense)
+        id = expense._id.to_s
+        return {
+            name: expense.name, 
+            amount: expense.amount, 
+            date: expense.date, 
+            id: id
+        }
+    end
+
+    def save_paychecks(frequency, pay_date, user)
+            # 5 years worth
+        if frequency == "weekly"
+            num_weeks = 260 
+        elsif frequency == "bi-weekly"
+            num_weeks = 130
+        elsif frequency == "monthly"
+            num_weeks = 60
+        else
+            num_weeks = 120
+        end
+
+        first_paycheck = get_next_paycheck(pay_date, frequency)
+
+        for a in 1..num_weeks do
+            pay_date = get_next_paycheck(pay_date, frequency)
+            @paycheck = Paycheck.new(
+                date: pay_date,
+                user_id: user,
+            )
+        
+            if @paycheck.save
+                puts "paycheck added"
+            else 
+                if @paycheck.errors.any?
+                    @paycheck.errors.full_messages.each do |message|
+                        puts message
+                    end
+                end
+            end
+        end
+        return first_paycheck
+
+    end
+
 end

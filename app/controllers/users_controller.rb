@@ -6,67 +6,27 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    puts params
-    @user = User.where(uid: params[:uid])
-    if @user.length() == 1
-      puts @user[0].id
-      @expenses = Expense.where(user: @user[0].id).all
-      puts @expenses.length
-
-      expensesList = []
-      for i in @expenses do
-        id = i._id.to_s
-        expensesList.append({
-            name: i.name, 
-            amount: i.amount, 
-            date: i.date, 
-            id: id
-          })
-      end
-
-      @paychecks = Paycheck.where(user: @user[0].id).all
-      puts @paychecks.length
-
-      paychecksList = []
-      for i in @paychecks do
-        id = i._id.to_s
-        paychecksList.append({date: i.date, id: id})
-      end
-
-      @debts = Debt.where(user: @user[0].id).all
-      puts @debts.length
-
-      debtsList = []
-      for i in @debts do
-        id = i._id.to_s
-        debtsList.append({
-            name: i.name, 
-            type: i.type, 
-            owed: i.owed, 
-            limit: i.limit, 
-            rate: i.rate, 
-            payment: i.payment, 
-            id: id
-          })
-      end
+    begin  # "try" block
+      @user = User.find_by(uid: params[:uid])
 
       data = {
-        user: @user[0], 
-        expenses: expensesList, 
-        paychecks: paychecksList,
-        debts: debtsList
+        user: @user, 
+        expenses: get_expenses_list(@user.id), 
+        paychecks: get_paychecks_list(@user.id),
+        debts: get_debts_list(@user.id),
+        accounts: get_accounts_list(@user.id)
       }
 
       render json: { data: data, status: :ok, message: 'Success' }
-    else
+
+    rescue Mongoid::Errors::DocumentNotFound => err
       render json: { status: :not_found, message: 'Not Found' }
     end
   end
 
   # GET /users/1 or /users/1.json
   def show
-    puts "hello"
-    @user = User.where(uid: params[:uid])
+    render json: { status: :ok, message: 'Success', data: @user }
   end
 
   # GET /users/new
@@ -81,50 +41,13 @@ class UsersController < ApplicationController
 
   # POST /users or /users.json
   def create
-    @user = User.new(
-      username: params[:userName],
-      uid: params[:uid],
-      pay: params[:pay],
-      pay_rate: params[:rate],
-      pay_freq: params[:frequency],
-      hours: params[:hours],
-      date: params[:date],
-      deductions: params[:deductions],
-    )
+    @user = User.new(user_params)
 
-    # 5 years worth
-    if params[:frequency] == "weekly"
-      num_weeks = 260 
-    elsif params[:frequency] == "bi-weekly"
-      num_weeks = 130
-    elsif params[:frequency] == "monthly"
-      num_weeks = 60
-    else
-      num_weeks = 120
-    end
-
-    pay_date = params[:date]
-    for a in 1..num_weeks do
-      pay_date = UsersHelper.get_next_paycheck(pay_date, params[:frequency])
-      @paycheck = Paycheck.new(
-        date: pay_date,
-        user_id: @user,
-      )
-
-      if @paycheck.save
-        puts "paycheck added"
-      else 
-        if @paycheck.errors.any?
-          @paycheck.errors.full_messages.each do |message|
-            puts message
-          end
-        end
-      end
-    end
+    first_paycheck = UsersHelper.save_paychecks(params[:frequency], params[:date], @user)
 
     begin  # "try" block
       if @user.save
-        render json: { status: :created, message: 'Success', id: "#{@user.id}"}
+        render json: { status: :created, message: 'Success', id: "#{@user.id}", next: first_paycheck}
       else
         render json: { json: @user.errors, status: :unprocessable_entity }
       end
@@ -136,11 +59,6 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-    puts params
-    puts 
-    puts @user.date == params[:date]
-    puts @user.pay_freq == params[:frequency]
-    puts 
 
     if @user.date != params[:date] || @user.pay_freq != params[:frequency]
       @paychecks = Paycheck.where(user: @user).all
@@ -148,47 +66,11 @@ class UsersController < ApplicationController
         paycheck.delete
       end
 
-      # 5 years worth
-    if params[:frequency] == "weekly"
-      num_weeks = 260 
-    elsif params[:frequency] == "bi-weekly"
-      num_weeks = 130
-    elsif params[:frequency] == "monthly"
-      num_weeks = 60
-    else
-      num_weeks = 120
+      UsersHelper.save_paychecks(params[:frequency], params[:date], @user)
+
     end
 
-      pay_date = params[:date]
-      for a in 1..num_weeks do
-        pay_date = UsersHelper.get_next_paycheck(pay_date, params[:frequency])
-        @paycheck = Paycheck.new(
-          date: pay_date,
-          user_id: @user,
-        )
-
-        if @paycheck.save
-          puts "paycheck added"
-        else 
-          if @paycheck.errors.any?
-            @paycheck.errors.full_messages.each do |message|
-              puts message
-            end
-          end
-        end
-      end
-    end
-
-    if @user.update(
-      username: params[:userName],
-      uid: params[:uid],
-      pay: params[:pay],
-      pay_rate: params[:rate],
-      pay_freq: params[:frequency],
-      hours: params[:hours],
-      date: params[:date],
-      deductions: params[:deductions],
-    )
+    if @user.update(user_params)
 
       render json: { status: :ok, message: 'Success', id: "#{@user.id}"}
     else
@@ -220,6 +102,6 @@ class UsersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.require(:user).permit(:username, :uid, :pay, :pay_rate, :pay_freq)
+      params.require(:user).permit(:username, :uid, :pay, :rate, :frequency, :hours, :date, :deductions)
     end
 end

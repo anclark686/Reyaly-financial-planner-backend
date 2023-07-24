@@ -4,7 +4,6 @@ class PaychecksController < ApplicationController
   # GET /paychecks or /paychecks.json
   def index
     @paychecks = Paycheck.where(user: params[:id]).all
-    puts @paychecks
   end
 
   # GET /paychecks/1 or /paychecks/1.json

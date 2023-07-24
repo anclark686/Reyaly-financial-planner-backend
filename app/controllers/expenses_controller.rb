@@ -20,7 +20,6 @@ class ExpensesController < ApplicationController
         user: params[:user_id],
         :date => {:$gte => start_day, :$lte => end_day}
       ).all
-      puts @expenses
 
     else
       start_day = Date::strptime(params[:date], "%m/%d/%Y")
@@ -38,21 +37,20 @@ class ExpensesController < ApplicationController
           user: params[:user_id],
           :date => {:$gte => start_day, :$lte => end_day}
         ).all
-        puts @expenses
+
       else
         @expenses1 = Expense.where(
           user: params[:user_id],
           :date => {:$gte => start_day, :$lte => 31}
         ).all
-        puts @expenses1
+
         @expenses2 = Expense.where(
           user: params[:user_id],
           :date => {:$gte => 1, :$lte => end_day}
         ).all
-        puts @expenses2
 
         @expenses = @expenses1 + @expenses2
-        puts @expenses
+
       end
     end
     
@@ -75,20 +73,15 @@ class ExpensesController < ApplicationController
 
   # POST /expenses or /expenses.json
   def create
-    puts params
-    puts 
-    puts expense_params
     @expense = Expense.new(
       name: params[:name],
       amount: params[:amount],
       date: params[:date],
       user_id: params[:user_id],
     )
-    puts @expense
 
     if @expense.save
       render json: { status: :created, message: 'Success', id: "#{@expense.id}"}
-      puts @expense.id
     else
       render json: { json: @expense.errors, status: :unprocessable_entity }
     end
@@ -96,7 +89,6 @@ class ExpensesController < ApplicationController
 
   # PATCH/PUT /expenses/1 or /expenses/1.json
   def update
-    puts params
     if @expense.update(
         name: params[:name],
         amount: params[:amount],
@@ -111,7 +103,6 @@ class ExpensesController < ApplicationController
 
   # DELETE /expenses/1 or /expenses/1.json
   def destroy
-    puts params
     @expense.destroy
 
     render json: { status: :ok, message: 'Success'}
