@@ -1,10 +1,16 @@
+require 'accounts_helper'
+require 'users_helper'
+
+include AccountsHelper
+include UsersHelper
+
 class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy ]
 
   # GET /accounts or /accounts.json
   def index
-    @accounts = Account.where(user: params[:user_id]).all
-    render json: { data: @accounts, status: :ok}
+    accounts = get_accounts_list(params[:user_id])
+    render json: { data: accounts, status: :ok}
   end
 
   # GET /accounts/1 or /accounts/1.json
@@ -24,19 +30,8 @@ class AccountsController < ApplicationController
 
   # POST /accounts or /accounts.json
   def create
-
-    puts params
-    puts
-    puts "hello"
-    puts account_params
-
-    @user = User.where(id: params[:user_id])
-    puts @user
-
-    puts "you here?"
-    # expenses = params[:expenses].map {|x| {name: x[:name], amount: x[:amount], date: x[:date], id: x[:id]}}
     expenses = params[:expenses].map {|x| Expense.find_by(id: x[:id])}
-    puts expenses
+
     @account = Account.new(
       name: params[:name],
       start: params[:start],
@@ -47,20 +42,9 @@ class AccountsController < ApplicationController
     )
 
     if @account.save
-      for i in expenses do
-        puts "in the accounts controller"
-        puts i
-        @expense = Expense.find_by(id: i[:id])
-        puts 
-        puts @expense.account_ids 
-        puts "hello"
-        puts
-        # @expense.update(account: @account.id)
-      end
+      clean_other_accounts(@account, expenses)
 
-      # @account.update(expense_ids: expense_list)
       render json: { status: :created, message: 'Success', id: "#{@account.id}"}
-      puts @account.id
     else
       render json: { json: @account.errors, status: :unprocessable_entity }
     end
@@ -68,35 +52,39 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-    respond_to do |format|
-      if @account.update(account_params)
-        format.html { redirect_to account_url(@account), notice: "Account was successfully updated." }
-        format.json { render :show, status: :ok, location: @account }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @account.errors, status: :unprocessable_entity }
-      end
+    puts params
+    expenses = params[:expenses].map {|x| Expense.find_by(id: x[:id])}
+
+    if @account.update({
+                        name: params[:name],
+                        start: params[:start],
+                        total: params[:total],
+                        end: params[:end],
+                        user_id: params[:user_id],
+                        expenses: expenses,
+                      })
+                      
+      clean_other_accounts(@account, expenses)
+      render json: { status: :ok, message: 'Success'}
+    else
+      render json: { json: @account.errors, status: :unprocessable_entity }
     end
+    # to come
   end
 
   # DELETE /accounts/1 or /accounts/1.json
   def destroy
+    for expense in @account.expenses do
+      expense.pull(account_ids: @account._id)
+    end
     @account.destroy
 
-    respond_to do |format|
-      format.html { redirect_to accounts_url, notice: "Account was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    render json: { status: :ok, message: 'Account successfully deleted'}
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_account
       @account = Account.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def account_params
-      params.require(:account).permit(:name, :start, :total, :end, :user_id)
     end
 end

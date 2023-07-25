@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1 or /users/1.json
   def update
 
-    if @user.date != params[:date] || @user.pay_freq != params[:frequency]
+    if @user.date != params[:date] || @user.frequency != params[:frequency]
       @paychecks = Paycheck.where(user: @user).all
       for paycheck in @paychecks do
         paycheck.delete
@@ -88,10 +88,7 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
 
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: "User was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    render json: { status: :ok, message: 'User successfully deleted'}
   end
 
   private

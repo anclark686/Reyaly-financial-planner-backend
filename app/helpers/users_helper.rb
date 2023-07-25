@@ -229,6 +229,7 @@ module UsersHelper
             name: expense.name, 
             amount: expense.amount, 
             date: expense.date, 
+            account: expense.account_ids[0].to_s,
             id: id
         }
     end
