@@ -103,9 +103,12 @@ class ExpensesController < ApplicationController
 
   # DELETE /expenses/1 or /expenses/1.json
   def destroy
-    @account = Account.find_by(id: @expense.account_ids[0])
-    @account.pull(expense_ids: @expense._id)
-
+    begin
+      @account = Account.find_by(id: @expense.account_ids[0])
+      @account.pull(expense_ids: @expense._id)
+    rescue Mongoid::Errors::DocumentNotFound => err
+      puts err
+    end  
     @expense.destroy
 
     render json: { status: :ok, message: 'Success'}
