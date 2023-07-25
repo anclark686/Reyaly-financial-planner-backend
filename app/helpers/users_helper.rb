@@ -113,48 +113,52 @@ module UsersHelper
         sheet1[3,1] = data_obj[:userInfo][:hours]
         sheet1[4,0] = "No. of Deductions:"
         sheet1[4,1] = data_obj[:userInfo][:deductions]
-        sheet1[5,0] = "Est. Gross:"
-        sheet1[5,1] = data_obj[:userInfo][:gross]
-        sheet1[6,0] = "Est. Take Home:"
-        sheet1[6,1] = data_obj[:userInfo][:net]
-        sheet1[7,0] = "No. Expenses:"
-        sheet1[7,1] = data_obj[:userInfo][:numExpenses]
-        sheet1[8,0] = "Expense Total:"
-        sheet1[8,1] = data_obj[:userInfo][:totalExpenses]
-        sheet1[9,0] = "Pay Start Date:"
-        sheet1[9,1] = data_obj[:userInfo][:startDate]
-        sheet1[10,0] = "Next Payday:"
-        sheet1[10,1] = data_obj[:userInfo][:nextDate]
+        sheet1[5,0] = "State of Residence"
+        sheet1[5,1] = data_obj[:userInfo][:residence]
+        sheet1[6,0] = "Relationship Status:"
+        sheet1[6,1] = data_obj[:userInfo][:relationship]
+        sheet1[7,0] = "Est. Gross:"
+        sheet1[7,1] = data_obj[:userInfo][:gross]
+        sheet1[8,0] = "Est. Take Home:"
+        sheet1[8,1] = data_obj[:userInfo][:net]
+        sheet1[9,0] = "No. Expenses:"
+        sheet1[9,1] = data_obj[:userInfo][:numExpenses]
+        sheet1[10,0] = "Expense Total:"
+        sheet1[10,1] = data_obj[:userInfo][:totalExpenses]
+        sheet1[11,0] = "Pay Start Date:"
+        sheet1[11,1] = data_obj[:userInfo][:startDate]
+        sheet1[12,0] = "Next Payday:"
+        sheet1[12,1] = data_obj[:userInfo][:nextDate]
 
 
-        sheet1[12,0] = "Master Expense List"
-        sheet1.row(12).default_format = header_format
-        sheet1[13,0] = "Name:"
-        sheet1[13,1] = "Amount:"
-        sheet1[13,2] = "Due Date:"
-        sheet1.row(13).default_format = label_format
+        sheet1[14,0] = "Master Expense List"
+        sheet1.row(14).default_format = header_format
+        sheet1[15,0] = "Name:"
+        sheet1[15,1] = "Amount:"
+        sheet1[15,2] = "Due Date:"
+        sheet1.row(15).default_format = label_format
 
         for a in 0..data_obj[:expenses].length() -1 do
             expense = data_obj[:expenses][a]
-            row_num = a + 14
+            row_num = a + 16
             sheet1[row_num,0] = expense[:name]
             sheet1[row_num,1] = expense[:amount]
             sheet1[row_num,2] = expense[:date]
         end
 
-        10.times do |x| sheet1.row(x + 1).set_format(0, label_format) end
-        10.times do |x| sheet1.row(x + 1).set_format(1, standard_format) end
+        12.times do |x| sheet1.row(x + 1).set_format(0, label_format) end
+        12.times do |x| sheet1.row(x + 1).set_format(1, standard_format) end
             
         (0...sheet1.column_count).each do |col_idx|
             column = sheet1.column(col_idx)
             column.width = column.each_with_index.map do |cell, row|
                 chars = cell.present? ? cell.to_s.strip.split('').count + 4 : 1
-                ratio = sheet1.row(row).format(col_idx).font.size / 10
+                ratio = sheet1.row(row).format(col_idx).font.size / 12
                 (chars * ratio).round
             end.max
         end
 
-        for a in 14..data_obj[:expenses].length() + 14 do
+        for a in 16..data_obj[:expenses].length() + 16 do
             sheet1.row(a).default_format = standard_format
         end
 

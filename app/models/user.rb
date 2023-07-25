@@ -10,6 +10,8 @@ class User
   field :hours, type: Float
   field :date, type: String
   field :deductions, type: Integer
+  field :residence, type: String
+  field :relationship, type: String
   has_many :expenses, dependent: :delete_all
   accepts_nested_attributes_for :expenses, allow_destroy: true
   has_many :paychecks, dependent: :delete_all
