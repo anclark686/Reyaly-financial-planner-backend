@@ -87,6 +87,8 @@ module UsersHelper
     end
 
     def download_to_excel(data_obj)
+        File.delete(*Dir.glob('public/*.xls'))
+
         book = Spreadsheet::Workbook.new
 
         sheet1 = book.create_worksheet :name => 'User Details'
