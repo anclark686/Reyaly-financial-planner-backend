@@ -1,7 +1,7 @@
-development:
+default:
   clients:
     default:
-      uri: mongodb+srv://anclark686:kIYbiUn1iIpciKit@reyaly-finances.o0uz8bc.mongodb.net/reyaly-finances?retryWrites=true&w=majority
+      uri: <%= ENV.fetch("MONGOID_DB_URI") %>
       options:
         server_selection_timeout: 5
         # auth_mech: :mongodb_cr
