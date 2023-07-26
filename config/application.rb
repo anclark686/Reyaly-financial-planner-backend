@@ -32,7 +32,7 @@ module Backend
     # config.eager_load_paths << Rails.root.join("extras")
     config.middleware.insert_before ActionDispatch::Static, Rack::Cors do
       allow do
-        origins 'localhost:5173', 'https://reyaly-financial-planner-f6c880178bcd.herokuapp.com'
+        origins 'localhost:5173', 'https://main.d1r7v6lmapahca.amplifyapp.com'
         resource '*', headers: :any, methods: [:get, :post, :delete, :put, :patch, :options, :head]
       end
     end
