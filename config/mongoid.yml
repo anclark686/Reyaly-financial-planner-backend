@@ -1,5 +1,5 @@
 production:
-  sessions:
+  clients:
     default:
       uri: <%= ENV.fetch("MONGOID_DB_URI") %>
       options:
