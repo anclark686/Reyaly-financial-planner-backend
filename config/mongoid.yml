@@ -1,10 +1,16 @@
-default:
+production:
+  sessions:
+    default:
+      uri: <%= ENV.fetch("MONGOID_DB_URI") %>
+      options:
+        server_selection_timeout: 5
+
+development:
   clients:
     default:
       uri: <%= ENV.fetch("MONGOID_DB_URI") %>
       options:
         server_selection_timeout: 5
-        # auth_mech: :mongodb_cr
 
 test:
   clients:
