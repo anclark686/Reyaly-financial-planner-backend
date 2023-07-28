@@ -44,6 +44,10 @@ gem 'rack-cors'
 
 gem "spreadsheet"
 
+gem 'rexml', '~> 3.2', '>= 3.2.4'
+
+gem 'dotenv-rails'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
@@ -65,7 +69,7 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem "capybara"
-  gem "selenium-webdriver"
-  gem "webdrivers"
+  gem 'minitest-rails'
+	gem 'minitest-reporters'
+  gem 'database_cleaner-mongoid'
 end

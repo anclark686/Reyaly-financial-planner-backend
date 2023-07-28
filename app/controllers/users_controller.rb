@@ -2,25 +2,31 @@ require 'users_helper'
 include UsersHelper
 
 class UsersController < ApplicationController
-  before_action :set_user, only: %i[ show edit update destroy ]
+  before_action :set_user, only: %i[ update destroy ]
 
   # GET /users or /users.json
   def index
-    begin  # "try" block
-      @user = User.find_by(uid: params[:uid])
 
-      data = {
-        user: @user, 
-        expenses: get_expenses_list(@user.id), 
-        paychecks: get_paychecks_list(@user.id),
-        debts: get_debts_list(@user.id),
-        accounts: get_accounts_list(@user.id)
-      }
+    if params[:uid]
+      begin  # "try" block
+        @user = User.find_by(uid: params[:uid])
 
-      render json: { data: data, status: :ok, message: 'Success' }
+        data = {
+          user: @user, 
+          expenses: get_expenses_list(@user.id), 
+          paychecks: get_paychecks_list(@user.id),
+          debts: get_debts_list(@user.id),
+          accounts: get_accounts_list(@user.id)
+        }
 
-    rescue Mongoid::Errors::DocumentNotFound => err
-      render json: { status: :not_found, message: 'Not Found' }
+        render json: { data: data, status: :ok, message: 'Success' }
+
+      rescue Mongoid::Errors::DocumentNotFound => err
+        render json: { status: :not_found, message: 'Not Found' }
+      end
+    else 
+      @users = User.all
+      render json: { data: @users, status: :ok, message: 'Success' }
     end
   end
 
@@ -29,31 +35,25 @@ class UsersController < ApplicationController
     render json: { status: :ok, message: 'Success', data: @user }
   end
 
-  # GET /users/new
-  def new
-    @user = User.new
-  end
-
-  # GET /users/1/edit
-  def edit
-  end
-
-
   # POST /users or /users.json
   def create
-    @user = User.new(user_params)
+    if user_params[:uid] 
+      @user = User.new(user_params)
 
-    first_paycheck = UsersHelper.save_paychecks(params[:frequency], params[:date], @user)
+      first_paycheck = save_paychecks(user_params[:frequency], user_params[:date], @user)
 
-    begin  # "try" block
-      if @user.save
-        render json: { status: :created, message: 'Success', id: "#{@user.id}", next: first_paycheck}
-      else
-        render json: { json: @user.errors, status: :unprocessable_entity }
-      end
-    rescue Mongo::Error::OperationFailure => err
-      render json: { status: :not_implemented, message: 'Duplicate'}
-    end 
+      begin  # "try" block
+        if @user.save
+          render json: { status: :created, message: 'Success', id: "#{@user.id}", next: first_paycheck}, status: :created
+        else
+          render json: { json: @user.errors, status: :unprocessable_entity }
+        end
+      rescue Mongo::Error::OperationFailure => err
+        render json: { status: :not_implemented, message: 'Duplicate'}, status: :not_implemented
+      end 
+    else
+      render json: { status: :not_implemented, message: 'UID required' }, status: :not_implemented
+    end
   end
 
 
@@ -86,9 +86,12 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    @user.destroy
-
-    render json: { status: :ok, message: 'User successfully deleted'}
+    if @user.destroy
+      render json: { status: :ok, message: 'User successfully deleted'}
+    else
+      render json: { status: :not_found, message: 'User not found'}
+    end
+    
   end
 
   private

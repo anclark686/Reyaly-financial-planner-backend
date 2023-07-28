@@ -5,11 +5,11 @@ one:
   start: 1.5
   total: 1.5
   end: 1.5
-  user: one
+  user: user_one
 
 two:
   name: MyString
   start: 1.5
   total: 1.5
   end: 1.5
-  user: two
+  user: user_two

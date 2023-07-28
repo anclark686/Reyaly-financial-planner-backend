@@ -241,7 +241,7 @@ module UsersHelper
     end
 
     def save_paychecks(frequency, pay_date, user)
-            # 5 years worth
+        # 5 years worth
         if frequency == "weekly"
             num_weeks = 260 
         elsif frequency == "bi-weekly"

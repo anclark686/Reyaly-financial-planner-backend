@@ -15,10 +15,6 @@ development:
 test:
   clients:
     default:
-      database: backend_test
-      hosts:
-        - localhost:27017
+      uri: <%= ENV.fetch("TEST_MONGOID_DB_URI") %>
       options:
-        read:
-          mode: :primary
-        max_pool_size: 1
+        server_selection_timeout: 5

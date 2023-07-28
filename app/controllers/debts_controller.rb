@@ -1,23 +1,12 @@
 class DebtsController < ApplicationController
-  before_action :set_debt, only: %i[ show edit update destroy ]
+  before_action :set_debt, only: %i[ update destroy ]
 
   # GET /debts or /debts.json
   def index
     @debts = Debt.where(user: params[:id]).all
+    render json: { data: @debts, status: :ok}
   end
 
-  # GET /debts/1 or /debts/1.json
-  def show
-  end
-
-  # GET /debts/new
-  def new
-    @debt = Debt.new
-  end
-
-  # GET /debts/1/edit
-  def edit
-  end
 
   # POST /debts or /debts.json
   def create
@@ -33,7 +22,7 @@ class DebtsController < ApplicationController
     )
 
     if @debt.save
-      render json: { status: :created, message: 'Success', id: "#{@debt.id}"}
+      render json: { status: :created, message: 'Success', id: "#{@debt.id}"}, status: :created
     else
       render json: { json: @debt.errors, status: :unprocessable_entity }
     end

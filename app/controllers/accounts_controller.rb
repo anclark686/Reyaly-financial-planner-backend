@@ -5,7 +5,7 @@ include AccountsHelper
 include UsersHelper
 
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[ show edit update destroy ]
+  before_action :set_account, only: %i[ update destroy ]
 
   # GET /accounts or /accounts.json
   def index
@@ -13,20 +13,6 @@ class AccountsController < ApplicationController
     render json: { data: accounts, status: :ok}
   end
 
-  # GET /accounts/1 or /accounts/1.json
-  def show
-    # @expenses = Expense.where()
-    render json: { status: :ok }
-  end
-
-  # GET /accounts/new
-  def new
-    @account = Account.new
-  end
-
-  # GET /accounts/1/edit
-  def edit
-  end
 
   # POST /accounts or /accounts.json
   def create
@@ -44,7 +30,7 @@ class AccountsController < ApplicationController
     if @account.save
       clean_other_accounts(@account, expenses)
 
-      render json: { status: :created, message: 'Success', id: "#{@account.id}"}
+      render json: { status: :created, message: 'Success', id: "#{@account.id}"}, status: :created
     else
       render json: { json: @account.errors, status: :unprocessable_entity }
     end
@@ -77,6 +63,7 @@ class AccountsController < ApplicationController
     for expense in @account.expenses do
       expense.pull(account_ids: @account._id)
     end
+
     @account.destroy
 
     render json: { status: :ok, message: 'Account successfully deleted'}

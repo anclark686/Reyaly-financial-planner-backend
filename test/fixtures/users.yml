@@ -1,11 +1,25 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+user_one:
   username: MyString
-  pay_rate: MyString
-  pay_freq: MyString
+  uid: MyString
+  pay: 1.5
+  rate: MyString
+  frequency: MyString
+  hours: 1.5
+  date: MyString
+  deductions: 1
+  residence: MyString
+  relationship: MyString
 
-two:
+user_two:
   username: MyString
-  pay_rate: MyString
-  pay_freq: MyString
+  uid: MyString
+  pay: 1.5
+  rate: MyString
+  frequency: MyString
+  hours: 1.5
+  date: MyString
+  deductions: 1
+  residence: MyString
+  relationship: MyString

@@ -1,5 +1,5 @@
 class ExpensesController < ApplicationController
-  before_action :set_expense, only: %i[ show edit update destroy ]
+  before_action :set_expense, only: %i[ update destroy ]
 
   # GET /expenses or /expenses.json
   def index
@@ -58,19 +58,6 @@ class ExpensesController < ApplicationController
     render json: { data: @expenses, status: :ok, message: 'Success' }
   end
 
-  # GET /expenses/1 or /expenses/1.json
-  def show
-  end
-
-  # GET /expenses/new
-  def new
-    @expense = Expense.new
-  end
-
-  # GET /expenses/1/edit
-  def edit
-  end
-
   # POST /expenses or /expenses.json
   def create
     @expense = Expense.new(
@@ -81,7 +68,7 @@ class ExpensesController < ApplicationController
     )
 
     if @expense.save
-      render json: { status: :created, message: 'Success', id: "#{@expense.id}"}
+      render json: { status: :created, message: 'Success', id: "#{@expense.id}"}, status: :created
     else
       render json: { json: @expense.errors, status: :unprocessable_entity }
     end

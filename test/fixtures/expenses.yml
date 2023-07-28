@@ -3,11 +3,11 @@
 one:
   name: MyString
   amount: 1
-  date: 2023-06-24
-  user: one
+  date: 1
+  user: user_one
 
 two:
   name: MyString
   amount: 1
-  date: 2023-06-24
-  user: two
+  date: 1
+  user: user_two
