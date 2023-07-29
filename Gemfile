@@ -48,6 +48,8 @@ gem 'rexml', '~> 3.2', '>= 3.2.4'
 
 gem 'dotenv-rails'
 
+gem 'httparty'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
