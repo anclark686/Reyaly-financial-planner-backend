@@ -46,7 +46,7 @@ class UsersController < ApplicationController
         if @user.save
           render json: { status: :created, message: 'Success', id: "#{@user.id}", next: first_paycheck}, status: :created
         else
-          render json: { json: @user.errors, status: :unprocessable_entity }
+          render json: { json: @user.errors, status: :unprocessable_entity }, status: :unprocessable_entity
         end
       rescue Mongo::Error::OperationFailure => err
         render json: { status: :not_implemented, message: 'Duplicate'}, status: :not_implemented

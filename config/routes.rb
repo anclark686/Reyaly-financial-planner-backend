@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :savings, only: [:index]
+  resources :converter, only: [:index]
   
   resources :users do
     post "download"
