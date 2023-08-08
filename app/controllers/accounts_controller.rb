@@ -10,7 +10,7 @@ class AccountsController < ApplicationController
   # GET /accounts or /accounts.json
   def index
     accounts = get_accounts_list(params[:user_id])
-    render json: { data: accounts, status: :ok}
+    render json: { data: accounts, status: :ok}, status: :ok
   end
 
 
@@ -32,7 +32,7 @@ class AccountsController < ApplicationController
 
       render json: { status: :created, message: 'Success', id: "#{@account.id}"}, status: :created
     else
-      render json: { json: @account.errors, status: :unprocessable_entity }
+      render json: { json: @account.errors, status: :unprocessable_entity }, status: :unprocessable_entity
     end
   end
 
@@ -53,7 +53,7 @@ class AccountsController < ApplicationController
       clean_other_accounts(@account, expenses)
       render json: { status: :ok, message: 'Success'}
     else
-      render json: { json: @account.errors, status: :unprocessable_entity }
+      render json: { json: @account.errors, status: :unprocessable_entity }, status: :unprocessable_entity
     end
     # to come
   end
@@ -66,7 +66,7 @@ class AccountsController < ApplicationController
 
     @account.destroy
 
-    render json: { status: :ok, message: 'Account successfully deleted'}
+    render json: { status: :ok, message: 'Account successfully deleted'}, status: :ok
   end
 
   private

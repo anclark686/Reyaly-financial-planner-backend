@@ -4,7 +4,7 @@ class PaychecksController < ApplicationController
   # GET /paychecks or /paychecks.json
   def index
     @paychecks = Paycheck.where(user: params[:id]).all
-    render json: { data: @paychecks, status: :ok}
+    render json: { data: @paychecks, status: :ok }, status: :ok
   end
 
   private

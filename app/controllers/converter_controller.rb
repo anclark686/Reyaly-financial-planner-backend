@@ -32,7 +32,7 @@ class ConverterController < ApplicationController
         puts ex_response.body
 
         data = {conversion: JSON.parse(con_response.body), exchange: JSON.parse(ex_response.body)}
-        render json: { data: data, status: :ok} 
+        render json: { data: data, status: :ok}, status: :ok
       else
         render json: { message: "Missing required information", status: :unprocessable_entity }, status: :unprocessable_entity 
       end

@@ -55,7 +55,7 @@ class ExpensesController < ApplicationController
     end
     
 
-    render json: { data: @expenses, status: :ok, message: 'Success' }
+    render json: { data: @expenses, status: :ok, message: 'Success' }, status: :ok
   end
 
   # POST /expenses or /expenses.json
@@ -70,7 +70,7 @@ class ExpensesController < ApplicationController
     if @expense.save
       render json: { status: :created, message: 'Success', id: "#{@expense.id}"}, status: :created
     else
-      render json: { json: @expense.errors, status: :unprocessable_entity }
+      render json: { json: @expense.errors, status: :unprocessable_entity }, status: :unprocessable_entity
     end
   end
 
@@ -82,9 +82,9 @@ class ExpensesController < ApplicationController
         date: params[:date],
         user_id: params[:user_id],
       )
-      render json: { status: :ok, message: 'Success' }
+      render json: { status: :ok, message: 'Success' }, status: :ok
     else
-      render json: { json: @expense.errors, status: :unprocessable_entity }
+      render json: { json: @expense.errors, status: :unprocessable_entity }, status: :unprocessable_entity
     end
   end
 
@@ -98,7 +98,7 @@ class ExpensesController < ApplicationController
     end  
     @expense.destroy
 
-    render json: { status: :ok, message: 'Success'}
+    render json: { status: :ok, message: 'Success'}, status: :ok
   end
 
   private

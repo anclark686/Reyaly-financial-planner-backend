@@ -41,7 +41,7 @@ class SavingsController < ApplicationController
       savings_accounts.push(savings_account) 
     end 
 
-    render json: { data: savings_accounts, fetched: date_fetched, status: :ok} 
+    render json: { data: savings_accounts, fetched: date_fetched, status: :ok }, status: :ok
   end
 
 end

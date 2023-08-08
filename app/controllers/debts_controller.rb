@@ -4,7 +4,7 @@ class DebtsController < ApplicationController
   # GET /debts or /debts.json
   def index
     @debts = Debt.where(user: params[:id]).all
-    render json: { data: @debts, status: :ok}
+    render json: { data: @debts, status: :ok}, status: :ok
   end
 
 
@@ -24,7 +24,7 @@ class DebtsController < ApplicationController
     if @debt.save
       render json: { status: :created, message: 'Success', id: "#{@debt.id}"}, status: :created
     else
-      render json: { json: @debt.errors, status: :unprocessable_entity }
+      render json: { json: @debt.errors, status: :unprocessable_entity }, status: :unprocessable_entity
     end
 
   end
@@ -41,9 +41,9 @@ class DebtsController < ApplicationController
         payment: params[:payment],
         user_id: params[:user_id],
       )
-      render json: { status: :ok, message: 'Success' }
+      render json: { status: :ok, message: 'Success' }, status: :ok
     else
-      render json: { json: @expense.errors, status: :unprocessable_entity }
+      render json: { json: @expense.errors, status: :unprocessable_entity }, status: :unprocessable_entity
     end
   end
 
@@ -52,7 +52,7 @@ class DebtsController < ApplicationController
 
     @debt.destroy
 
-    render json: { status: :ok, message: 'Success'}
+    render json: { status: :ok, message: 'Success'}, status: :ok
   end
 
   private
