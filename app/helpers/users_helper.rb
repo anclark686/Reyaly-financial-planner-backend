@@ -261,15 +261,12 @@ module UsersHelper
                 user_id: user,
             )
         
-            if @paycheck.save
-                puts "paycheck added"
-            else 
-                if @paycheck.errors.any?
-                    @paycheck.errors.full_messages.each do |message|
-                        puts message
-                    end
+            if @paycheck.errors.any?
+                @paycheck.errors.full_messages.each do |message|
+                    puts message
                 end
             end
+        
         end
         return first_paycheck
 
