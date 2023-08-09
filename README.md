@@ -9,6 +9,7 @@
   * spreadsheet - used for spreadsheet creation
   * dotenv-rails - for handling of ENV variables 
   * httparty - to assist in crawling websites
+  * nokogiri - for parsing HTML
 
 ## Configuration
   * Serves as a backend to a Vue JS application

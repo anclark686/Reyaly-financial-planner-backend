@@ -39,6 +39,8 @@ gem 'dotenv-rails'
 
 gem 'httparty'
 
+gem 'nokogiri', '~> 1.15', '>= 1.15.3'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
