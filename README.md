@@ -19,8 +19,8 @@
 
 ## Project Setup
   * Setup .env per the .env.template
+  * Run the following from the shell
 
-### Run the following from the shell
 ```sh
 bundle install
 bin/rails server
