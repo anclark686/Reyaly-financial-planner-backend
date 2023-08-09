@@ -20,9 +20,10 @@
 ## Project Setup
   * Setup .env per the .env.template
 
+### Run the following from the shell
 ```sh
 bundle install
-bin/rails server"
+bin/rails server
 ```
 
 ## How to run the test suite
