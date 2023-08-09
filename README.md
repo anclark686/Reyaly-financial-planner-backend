@@ -13,16 +13,32 @@
 
 ## Configuration
   * Serves as a backend to a Vue JS application
+    * https://github.com/anclark686/Reyaly-financial-planner-frontend
   * No templating
   * MongoDB as the database
 
-##  Get Started
+## Project Setup
   * Setup .env per the .env.template
-  * From the terminal:
-    * Run "bundle install"
-    * Run "bin/rails server"
+
+```sh
+bundle install
+bin/rails server"
+```
 
 ## How to run the test suite
-  * To run all tests - "bin/rails test"
-  * To run model tests - "bin/rails test:models"
-  * To run controller tests - "bin/rails test:controllers"
+
+### To run all tests
+
+```sh
+bin/rails test
+```
+### To run model tests
+
+```sh
+bin/rails test:models
+```
+### To run controller tests
+
+```sh
+bin/rails test:controllers
+```
