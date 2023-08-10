@@ -54,7 +54,7 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-
+    puts params
     if @user.date != params[:date] || @user.frequency != params[:frequency]
       @paychecks = Paycheck.where(user: @user).all
       for paycheck in @paychecks do
@@ -106,6 +106,12 @@ class UsersController < ApplicationController
                               :frequency, 
                               :hours, 
                               :date, 
+                              :income,
+                              :pay2, 
+                              :rate2, 
+                              :frequency2, 
+                              :hours2, 
+                              :date2,
                               :deductions, 
                               :residence,
                               :relationship
