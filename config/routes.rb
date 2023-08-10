@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root "application#index"
   resources :savings, only: [:index]
   resources :converter, only: [:index]
   

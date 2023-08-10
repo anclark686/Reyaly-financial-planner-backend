@@ -13,3 +13,83 @@
  *= require_tree .
  *= require_self
  */
+
+@import url("https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;700&display=swap");
+
+body {
+  margin: 0px;
+  font-family: "Poppins", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0px;
+}
+a {
+  text-decoration: none;
+  color: #1e9f63;
+}
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(253, 247, 240);
+}
+
+.pic-header {
+  min-height: 200px;
+  background:
+    linear-gradient(rgba(252, 251, 251, 1), rgba(0, 0, 0, 0.2)),
+    url("/assets/money.jpg") center calc(50% - 20%) / cover;
+}
+
+.navbar {
+  background-color: rgb(30, 53, 30);
+  padding: 10px 20px;
+}
+
+.brand {
+  color: white;
+  font-size: 24px;
+  padding: 10px;
+  font-family: "Lobster", cursive;
+}
+
+.brand-header {
+  color: white;
+  text-decoration: none;
+}
+
+.right {
+  display: flex;
+}
+
+.main-body {
+  margin-top: 100px;
+  text-align: center;
+}
+
+footer {
+  background-color: rgb(30, 53, 30);
+  width: 100%;
+  color: white;
+  text-align: center;
+  margin-top: auto;
+  justify-self: flex-end;
+}
+
+footer a:visited {
+  color: white;
+
+}
+
+.social-icon {
+  height: 25px;
+  width: 25px;
+  margin: 5px 5px 0 5px;
+}
