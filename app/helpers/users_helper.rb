@@ -240,7 +240,7 @@ module UsersHelper
         }
     end
 
-    def save_paychecks(frequency, pay_date, user)
+    def save_paychecks(frequency, pay_date, user, income_src)
         # 5 years worth
         if frequency == "weekly"
             num_weeks = 260 
@@ -258,6 +258,7 @@ module UsersHelper
             pay_date = get_next_paycheck(pay_date, frequency)
             @paycheck = Paycheck.new(
                 date: pay_date,
+                income: income_src,
                 user_id: user,
             )
         
