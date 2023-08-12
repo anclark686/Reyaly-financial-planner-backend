@@ -6,5 +6,8 @@ end
 
 task :send_reminders => :environment do
   @users = User.all
-  puts @users
+  for user in @users do
+    puts hello
+    puts user
+  end
 end
