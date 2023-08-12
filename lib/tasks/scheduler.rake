@@ -5,5 +5,6 @@ task :update_feed => :environment do
 end
 
 task :send_reminders => :environment do
-  puts "hello"
+  @users = User.all
+  puts @users
 end
