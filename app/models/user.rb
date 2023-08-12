@@ -9,13 +9,14 @@ class User
   field :frequency, type: String
   field :hours, type: Float
   field :date, type: String
+  field :deductions, type: Integer
   field :income, type: Integer
   field :pay2, type: Float
   field :rate2, type: String
   field :frequency2, type: String
   field :hours2, type: Float
   field :date2, type: String
-  field :deductions, type: Integer
+  field :deductions2, type: Integer
   field :residence, type: String
   field :relationship, type: String
   

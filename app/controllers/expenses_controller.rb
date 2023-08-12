@@ -3,35 +3,59 @@ class ExpensesController < ApplicationController
 
   # GET /expenses or /expenses.json
   def index
-    
-    if params[:frequency] == "monthly"
-      @expenses = Expense.where(user: params[:user_id]).all
+    if params[:frequency]
+      if params[:frequency] == "monthly"
+        @expenses = Expense.where(user: params[:user_id]).all
 
-    elsif params[:frequency] == "bi-monthly"
-      start_day = Date::strptime(params[:date], "%m/%d/%Y").mday
+      elsif params[:frequency] == "bi-monthly"
+        start_day = Date::strptime(params[:date], "%m/%d/%Y").mday
 
-      if start_day == 1
-        end_day = 15
+        if start_day == 1
+          end_day = 15
+        else
+          end_day = 31
+        end
+
+        @expenses = Expense.where(
+          user: params[:user_id],
+          :date => {:$gte => start_day, :$lte => end_day}
+        ).all
+
       else
-        end_day = 31
-      end
+        start_day = Date::strptime(params[:date], "%m/%d/%Y")
+        if params[:frequency] == "weekly"
+          end_day = start_day + 7.days
+        elsif params[:frequency] == "bi-weekly"
+          end_day = start_day + 14.days
+        end
+        
+        start_day = start_day.mday
+        end_day = end_day.mday
 
-      @expenses = Expense.where(
-        user: params[:user_id],
-        :date => {:$gte => start_day, :$lte => end_day}
-      ).all
+        if end_day > start_day
+          @expenses = Expense.where(
+            user: params[:user_id],
+            :date => {:$gte => start_day, :$lte => end_day}
+          ).all
 
-    else
-      start_day = Date::strptime(params[:date], "%m/%d/%Y")
-      if params[:frequency] == "weekly"
-        end_day = start_day + 7.days
-      elsif params[:frequency] == "bi-weekly"
-        end_day = start_day + 14.days
-      end
+        else
+          @expenses1 = Expense.where(
+            user: params[:user_id],
+            :date => {:$gte => start_day, :$lte => 31}
+          ).all
+
+          @expenses2 = Expense.where(
+            user: params[:user_id],
+            :date => {:$gte => 1, :$lte => end_day}
+          ).all
+
+          @expenses = @expenses1 + @expenses2
+        end
+      end  
+    else 
+      start_day = Date::strptime(params[:date1], "%m/%d/%Y").mday
+      end_day = Date::strptime(params[:date2], "%m/%d/%Y").mday
       
-      start_day = start_day.mday
-      end_day = end_day.mday
-
       if end_day > start_day
         @expenses = Expense.where(
           user: params[:user_id],
@@ -50,10 +74,8 @@ class ExpensesController < ApplicationController
         ).all
 
         @expenses = @expenses1 + @expenses2
-
       end
-    end
-    
+    end  
 
     render json: { data: @expenses, status: :ok, message: 'Success' }, status: :ok
   end

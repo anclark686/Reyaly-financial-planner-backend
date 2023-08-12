@@ -176,13 +176,13 @@ module UsersHelper
         return expenses_list
     end
 
-    def get_paychecks_list(user_id)
-        @paychecks = Paycheck.where(user: user_id).all
+    def get_paychecks_list(user_id, income_src)
+        @paychecks = Paycheck.where(user: user_id, income: income_src).all
 
         paychecks_list = []
         for i in @paychecks do
             id = i._id.to_s
-            paychecks_list.append({date: i.date, id: id})
+            paychecks_list.append({date: i.date, id: id, income: income_src })
         end
 
         return paychecks_list
@@ -252,8 +252,6 @@ module UsersHelper
             num_weeks = 120
         end
 
-        first_paycheck = get_next_paycheck(pay_date, frequency)
-
         for a in 1..num_weeks do
             pay_date = get_next_paycheck(pay_date, frequency)
             @paycheck = Paycheck.new(
@@ -261,16 +259,14 @@ module UsersHelper
                 income: income_src,
                 user_id: user,
             )
-        
+            if @paycheck.save
+                puts "paycheck added"
+            end
             if @paycheck.errors.any?
                 @paycheck.errors.full_messages.each do |message|
                     puts message
                 end
             end
-        
         end
-        return first_paycheck
-
     end
-
 end
