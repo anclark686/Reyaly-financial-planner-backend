@@ -2,6 +2,9 @@
 require "#{Rails.root}/app/helpers/users_helper"
 include UsersHelper
 
+require "#{Rails.root}/app/mailers/users_mailer"
+include UsersHelper
+
 desc "This task is called by the Heroku scheduler add-on"
 
 task :update_feed => :environment do
