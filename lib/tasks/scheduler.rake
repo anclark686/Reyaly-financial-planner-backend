@@ -1,4 +1,7 @@
+#rake send_reminders
+
 desc "This task is called by the Heroku scheduler add-on"
+
 task :update_feed => :environment do
   puts "Updating feed..."
   puts "done."
@@ -7,7 +10,8 @@ end
 task :send_reminders => :environment do
   @users = User.all
   for user in @users do
-    puts hello
+    puts "hello"
     puts user
   end
 end
+
