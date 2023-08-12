@@ -1,5 +1,5 @@
 #heroku run rake send_reminders
-require 'users_helper'
+require "#{Rails.root}/app/helpers/users_helper"
 include UsersHelper
 
 desc "This task is called by the Heroku scheduler add-on"
