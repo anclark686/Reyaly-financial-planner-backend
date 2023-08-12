@@ -15,8 +15,6 @@ class UsersController < ApplicationController
     begin  # "try" block
       @user = User.find_by(uid: params[:id])
 
-      UsersMailer.with(email: @user.email, name: @user.username).welcome_email.deliver_later
-
       data = {
         user: @user, 
         expenses: get_expenses_list(@user.id), 
@@ -43,6 +41,7 @@ class UsersController < ApplicationController
 
       begin  # "try" block
         if @user.save
+          UsersMailer.with(email: @user.email, name: @user.username).welcome_email.deliver_later
           render json: { status: :created, message: 'Success', id: "#{@user.id}", next: first_paycheck}, status: :created
         else
           render json: { json: @user.errors, status: :unprocessable_entity }, status: :unprocessable_entity
@@ -81,7 +80,7 @@ class UsersController < ApplicationController
     end
 
     if @user.update(user_params)
-
+      UsersMailer.with(email: @user.email, name: @user.username).update_email.deliver_later
       render json: { status: :ok, message: 'Success', id: "#{@user.id}"}
     else
       render json: { json: @user.errors, status: :unprocessable_entity }, status: :unprocessable_entity

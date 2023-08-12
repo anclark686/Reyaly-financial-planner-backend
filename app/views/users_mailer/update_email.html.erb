@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style>
+      .main {
+        background-color: rgb(253, 247, 240);
+        font-family: "Century Gothic", Arial, sans-serif;
+        text-align: center;
+      }
+      #bottom {
+        margin-bottom: 50px;
+      }
+    </style>
+  </head>
+  <body style="background-color: rgb(253, 247, 240); text-align: center; color: black; font-size: 1rem;">
+    <main>
+      <h1 class="header">Hello <%= @name %>! </h1>
+      <h2>
+        It looks like you've recently updated your information.
+      </h2>
+      <p>
+        If you didn't update your information, someone might be using your account. Check and secure your account now.
+      </p>
+      <p>
+        To login view settings, <a href=<%= @url %> style="color: green;">Click Here</a>.
+      </p>
+
+      <h3 id="bottom">If you have any questions or security concerns, please feel free to reply to this email.</h3>
+    </main>
+  </body>
+</html>
