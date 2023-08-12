@@ -181,7 +181,6 @@ module UsersHelper
                 end.max
             end       
         else
-            puts "hello?"
             sheet1[0,0] = "Pay Details"
             sheet1.row(0).default_format = header_format
 
