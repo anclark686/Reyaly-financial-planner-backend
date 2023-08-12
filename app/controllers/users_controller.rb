@@ -15,6 +15,8 @@ class UsersController < ApplicationController
     begin  # "try" block
       @user = User.find_by(uid: params[:id])
 
+      UsersMailer.with(email: @user.email, name: @user.username).welcome_email.deliver_later
+
       data = {
         user: @user, 
         expenses: get_expenses_list(@user.id), 
@@ -112,6 +114,7 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(
                               :username, 
+                              :email,
                               :uid, 
                               :residence,
                               :relationship,

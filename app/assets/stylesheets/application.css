@@ -45,7 +45,7 @@ a {
   min-height: 200px;
   background:
     linear-gradient(rgba(252, 251, 251, 1), rgba(0, 0, 0, 0.2)),
-    url("/money.jpg") center calc(50% - 20%) / cover;
+    url("assets/money.jpg") center calc(50% - 20%) / cover;
 }
 
 .navbar {

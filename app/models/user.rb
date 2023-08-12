@@ -4,6 +4,8 @@ class User
   field :username, type: String
   field :uid, type: String
   index({ uid: 1 }, { unique: true, name: "uid_index" })
+  field :email, type: String
+  index({ email: 1 }, { unique: true, name: "email_index" })
   field :pay, type: Float
   field :rate, type: String
   field :frequency, type: String
