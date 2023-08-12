@@ -94,72 +94,191 @@ module UsersHelper
         sheet1 = book.create_worksheet :name => 'User Details'
 
         header_format = Spreadsheet::Format.new :color => :green,
-                                        :weight => :bold,
-                                        :size => 18
+                                                :weight => :bold,
+                                                :size => 18
+
+        subheader_format = Spreadsheet::Format.new :color => :blue,
+                                                :weight => :bold,
+                                                :size => 16
 
         label_format = Spreadsheet::Format.new :weight => :bold,
-                                        :size => 14
+                                                :size => 14
 
         standard_format = Spreadsheet::Format.new :size => 14
 
-        sheet1[0,0] = "User Details"
-        sheet1.row(0).default_format = header_format
-
-        sheet1[1,0] = "Pay Rate:"
-        sheet1[1,1] = data_obj[:userInfo][:pay]
-        sheet1[2,0] = "Pay Frequency:"
-        sheet1[2,1] = data_obj[:userInfo][:payFreq]
-        sheet1[3,0] = "Paycheck Hours:"
-        sheet1[3,1] = data_obj[:userInfo][:hours]
-        sheet1[4,0] = "No. of Deductions:"
-        sheet1[4,1] = data_obj[:userInfo][:deductions]
-        sheet1[5,0] = "State of Residence"
-        sheet1[5,1] = data_obj[:userInfo][:residence]
-        sheet1[6,0] = "Relationship Status:"
-        sheet1[6,1] = data_obj[:userInfo][:relationship]
-        sheet1[7,0] = "Est. Gross:"
-        sheet1[7,1] = data_obj[:userInfo][:gross]
-        sheet1[8,0] = "Est. Take Home:"
-        sheet1[8,1] = data_obj[:userInfo][:net]
-        sheet1[9,0] = "No. Expenses:"
-        sheet1[9,1] = data_obj[:userInfo][:numExpenses]
-        sheet1[10,0] = "Expense Total:"
-        sheet1[10,1] = data_obj[:userInfo][:totalExpenses]
-        sheet1[11,0] = "Pay Start Date:"
-        sheet1[11,1] = data_obj[:userInfo][:startDate]
-        sheet1[12,0] = "Next Payday:"
-        sheet1[12,1] = data_obj[:userInfo][:nextDate]
-
-
-        sheet1[14,0] = "Master Expense List"
-        sheet1.row(14).default_format = header_format
-        sheet1[15,0] = "Name:"
-        sheet1[15,1] = "Amount:"
-        sheet1[15,2] = "Due Date:"
-        sheet1.row(15).default_format = label_format
-
-        for a in 0..data_obj[:expenses].length() -1 do
-            expense = data_obj[:expenses][a]
-            row_num = a + 16
-            sheet1[row_num,0] = expense[:name]
-            sheet1[row_num,1] = expense[:amount]
-            sheet1[row_num,2] = expense[:date]
-        end
-
-        12.times do |x| sheet1.row(x + 1).set_format(0, label_format) end
-        12.times do |x| sheet1.row(x + 1).set_format(1, standard_format) end
+        if data_obj[:userInfo][:income] == 1
+            sheet1[0,0] = "Pay Details"
+            sheet1.row(0).default_format = header_format
             
-        (0...sheet1.column_count).each do |col_idx|
-            column = sheet1.column(col_idx)
-            column.width = column.each_with_index.map do |cell, row|
-                chars = cell.present? ? cell.to_s.strip.split('').count + 4 : 1
-                ratio = sheet1.row(row).format(col_idx).font.size / 12
-                (chars * ratio).round
-            end.max
-        end
+            sheet1[1,0] = "Next Payday:"
+            sheet1[1,1] = data_obj[:userInfo][:nextDate]
 
-        for a in 16..data_obj[:expenses].length() + 16 do
-            sheet1.row(a).default_format = standard_format
+            sheet1[2,0] = "Est. Monthly Pay:"
+            sheet1[2,1] = data_obj[:userInfo][:monthly]
+
+            sheet1[3,0] = "Pay Rate:"
+            sheet1[3,1] = data_obj[:userInfo][:pay]
+
+            sheet1[4,0] = "Pay Frequency:"
+            sheet1[4,1] = data_obj[:userInfo][:frequency]
+
+            sheet1[5,0] = "Paycheck Hours:"
+            sheet1[5,1] = data_obj[:userInfo][:hours]
+
+            sheet1[6,0] = "Est. Gross:"
+            sheet1[6,1] = data_obj[:userInfo][:gross]
+
+            sheet1[7,0] = "No. of Deductions:"
+            sheet1[7,1] = data_obj[:userInfo][:deductions]
+
+            sheet1[8,0] = "Est. Federal Taxes:"
+            sheet1[8,1] = data_obj[:userInfo][:fed]
+
+            sheet1[9,0] = "Est. Local Taxes:"
+            sheet1[9,1] = data_obj[:userInfo][:local]
+
+            sheet1[10,0] = "Est. Take Home:"
+            sheet1[10,1] = data_obj[:userInfo][:net]
+
+            10.times do |x| sheet1.row(x + 1).set_format(0, label_format) end
+            10.times do |x| sheet1.row(x + 1).set_format(1, standard_format) end
+
+            sheet1[12,0] = "Master Expense List"
+            sheet1.row(12).default_format = header_format
+
+            sheet1[13,0] = "No. Expenses:"
+            sheet1[13,1] = data_obj[:userInfo][:numExpenses]
+            
+            sheet1[14,0] = "Expense Total:"
+            sheet1[14,1] = data_obj[:userInfo][:totalExpenses]
+
+            2.times do |x| sheet1.row(x + 13).set_format(0, label_format) end
+            2.times do |x| sheet1.row(x + 13).set_format(1, standard_format) end
+
+            sheet1[16,0] = "Name:"
+            sheet1[16,1] = "Amount:"
+            sheet1[16,2] = "Due Date:"
+            sheet1.row(16).default_format = label_format
+
+            for a in 0..data_obj[:expenses].length() -1 do
+                expense = data_obj[:expenses][a]
+                row_num = a + 17
+                sheet1[row_num,0] = expense[:name]
+                sheet1[row_num,1] = "$#{expense[:amount]}"
+                sheet1[row_num,2] = expense[:date]
+            end
+
+            for a in 17..data_obj[:expenses].length() + 17 do
+                sheet1.row(a).default_format = standard_format
+            end
+                
+            (0...sheet1.column_count).each do |col_idx|
+                column = sheet1.column(col_idx)
+                column.width = column.each_with_index.map do |cell, row|
+                    chars = cell.present? ? cell.to_s.strip.split('').count + 4 : 1
+                    ratio = sheet1.row(row).format(col_idx).font.size / 12
+                    (chars * ratio).round
+                end.max
+            end       
+        else
+            sheet1[0,0] = "Pay Details"
+            sheet1.row(0).default_format = header_format
+
+            sheet1[1,0] = "Next Payday:"
+            sheet1[1,1] = data_obj[:userInfo][:nextDate]
+
+            sheet1[2,0] = "Est. Monthly Pay:"
+            sheet1[2,1] = data_obj[:userInfo][:monthly]
+
+            2.times do |x| sheet1.row(x + 1).set_format(0, label_format) end
+            2.times do |x| sheet1.row(x + 1).set_format(1, standard_format) end
+
+            sheet1[4,0] = "Paycheck 1"
+            sheet1[4,3] = "Paycheck 2"
+            sheet1.row(4).default_format = subheader_format
+
+            sheet1[5,0] = "Pay Rate:"
+            sheet1[5,1] = data_obj[:userInfo][:pay]
+            sheet1[5,3] = "Pay Rate:"
+            sheet1[5,4] = data_obj[:userInfo][:pay2]
+
+            sheet1[6,0] = "Pay Frequency:"
+            sheet1[6,1] = data_obj[:userInfo][:frequency]
+            sheet1[6,3] = "Pay Frequency:"
+            sheet1[6,4] = data_obj[:userInfo][:frequency2]
+
+            sheet1[7,0] = "Paycheck Hours:"
+            sheet1[7,1] = data_obj[:userInfo][:hours]
+            sheet1[7,3] = "Paycheck Hours:"
+            sheet1[7,4] = data_obj[:userInfo][:hours2]
+
+            sheet1[8,0] = "Est. Gross:"
+            sheet1[8,1] = data_obj[:userInfo][:gross]
+            sheet1[8,3] = "Est. Gross:"
+            sheet1[8,4] = data_obj[:userInfo][:gross2]
+
+            sheet1[9,0] = "No. of Deductions:"
+            sheet1[9,1] = data_obj[:userInfo][:deductions]
+            sheet1[9,3] = "No. of Deductions:"
+            sheet1[9,4] = data_obj[:userInfo][:deductions2]
+
+            sheet1[10,0] = "Est. Federal Taxes:"
+            sheet1[10,1] = data_obj[:userInfo][:fed]
+            sheet1[10,3] = "Est. Federal Taxes:"
+            sheet1[10,4] = data_obj[:userInfo][:fed2]
+
+            sheet1[11,0] = "Est. Local Taxes:"
+            sheet1[11,1] = data_obj[:userInfo][:local]
+            sheet1[11,3] = "Est. Local Taxes:"
+            sheet1[11,4] = data_obj[:userInfo][:local2]
+
+            sheet1[12,0] = "Est. Take Home:"
+            sheet1[12,1] = data_obj[:userInfo][:net]
+            sheet1[12,3] = "Est. Take Home:"
+            sheet1[12,4] = data_obj[:userInfo][:net2]
+
+            8.times do |x| sheet1.row(x + 5).set_format(0, label_format) end
+            8.times do |x| sheet1.row(x + 5).set_format(1, standard_format) end
+            8.times do |x| sheet1.row(x + 5).set_format(3, label_format) end
+            8.times do |x| sheet1.row(x + 5).set_format(4, standard_format) end
+
+            sheet1[14,0] = "Master Expense List"
+            sheet1.row(14).default_format = header_format
+
+            sheet1[15,0] = "No. Expenses:"
+            sheet1[15,1] = data_obj[:userInfo][:numExpenses]
+            
+            sheet1[16,0] = "Expense Total:"
+            sheet1[16,1] = data_obj[:userInfo][:totalExpenses]
+
+            2.times do |x| sheet1.row(x + 15).set_format(0, label_format) end
+            2.times do |x| sheet1.row(x + 15).set_format(1, standard_format) end
+
+            sheet1[18,0] = "Name:"
+            sheet1[18,1] = "Amount:"
+            sheet1[18,2] = "Due Date:"
+            sheet1.row(18).default_format = label_format
+
+            for a in 0..data_obj[:expenses].length() -1 do
+                expense = data_obj[:expenses][a]
+                row_num = a + 19
+                sheet1[row_num,0] = expense[:name]
+                sheet1[row_num,1] = "$#{expense[:amount]}"
+                sheet1[row_num,2] = expense[:date]
+            end
+
+            for a in 19..data_obj[:expenses].length() + 19 do
+                sheet1.row(a).default_format = standard_format
+            end
+                
+            (0...sheet1.column_count).each do |col_idx|
+                column = sheet1.column(col_idx)
+                column.width = column.each_with_index.map do |cell, row|
+                    chars = cell.present? ? cell.to_s.strip.split('').count + 4 : 1
+                    ratio = sheet1.row(row).format(col_idx).font.size / 12
+                    (chars * ratio).round
+                end.max
+            end     
         end
 
         book.write "public/#{data_obj[:userInfo][:username]}-expense-info.xls"
@@ -176,13 +295,13 @@ module UsersHelper
         return expenses_list
     end
 
-    def get_paychecks_list(user_id)
-        @paychecks = Paycheck.where(user: user_id).all
+    def get_paychecks_list(user_id, income_src)
+        @paychecks = Paycheck.where(user: user_id, income: income_src).all
 
         paychecks_list = []
         for i in @paychecks do
             id = i._id.to_s
-            paychecks_list.append({date: i.date, id: id})
+            paychecks_list.append({date: i.date, id: id, income: income_src })
         end
 
         return paychecks_list
@@ -240,7 +359,7 @@ module UsersHelper
         }
     end
 
-    def save_paychecks(frequency, pay_date, user)
+    def save_paychecks(frequency, pay_date, user, income_src)
         # 5 years worth
         if frequency == "weekly"
             num_weeks = 260 
@@ -252,24 +371,21 @@ module UsersHelper
             num_weeks = 120
         end
 
-        first_paycheck = get_next_paycheck(pay_date, frequency)
-
         for a in 1..num_weeks do
             pay_date = get_next_paycheck(pay_date, frequency)
             @paycheck = Paycheck.new(
                 date: pay_date,
+                income: income_src,
                 user_id: user,
             )
-        
+            if @paycheck.save
+                puts "paycheck added"
+            end
             if @paycheck.errors.any?
                 @paycheck.errors.full_messages.each do |message|
                     puts message
                 end
             end
-        
         end
-        return first_paycheck
-
     end
-
 end

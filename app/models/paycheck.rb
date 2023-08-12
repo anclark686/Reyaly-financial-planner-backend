@@ -2,6 +2,7 @@ class Paycheck
   include Mongoid::Document
   include Mongoid::Timestamps
   field :date, type: String
+  field :income, type: Integer
   belongs_to :user
 
   def to_s

@@ -18,7 +18,8 @@ class UsersController < ApplicationController
       data = {
         user: @user, 
         expenses: get_expenses_list(@user.id), 
-        paychecks: get_paychecks_list(@user.id),
+        paychecks: get_paychecks_list(@user.id, 1),
+        paychecks2: get_paychecks_list(@user.id, 2),
         debts: get_debts_list(@user.id),
         accounts: get_accounts_list(@user.id)
       }
@@ -35,7 +36,8 @@ class UsersController < ApplicationController
     if user_params[:uid] 
       @user = User.new(user_params)
 
-      first_paycheck = save_paychecks(user_params[:frequency], user_params[:date], @user)
+      save_paychecks(user_params[:frequency], user_params[:date], @user, 1)
+      save_paychecks(user_params[:frequency2], user_params[:date2], @user, 2)
 
       begin  # "try" block
         if @user.save
@@ -54,15 +56,26 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 or /users/1.json
   def update
-
     if @user.date != params[:date] || @user.frequency != params[:frequency]
-      @paychecks = Paycheck.where(user: @user).all
+      @paychecks = Paycheck.where(user: @user, income: 1).all
+
       for paycheck in @paychecks do
         paycheck.delete
       end
 
-      UsersHelper.save_paychecks(params[:frequency], params[:date], @user)
+      UsersHelper.save_paychecks(params[:frequency], params[:date], @user, 1)
+    end
 
+    if params[:income] == 2
+      if @user.date2 != params[:date2] || @user.frequency2 != params[:frequency2]
+        @paychecks = Paycheck.where(user: @user, income: 2).all
+
+        for paycheck in @paychecks do
+          paycheck.delete
+        end
+
+        UsersHelper.save_paychecks(params[:frequency2], params[:date2], @user, 2)
+      end
     end
 
     if @user.update(user_params)
@@ -81,7 +94,6 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    
     if @user.destroy
       render json: { status: :ok, message: 'User successfully deleted'}, status: :ok
     else
@@ -101,14 +113,21 @@ class UsersController < ApplicationController
       params.require(:user).permit(
                               :username, 
                               :uid, 
+                              :residence,
+                              :relationship,
                               :pay, 
                               :rate, 
                               :frequency, 
                               :hours, 
                               :date, 
-                              :deductions, 
-                              :residence,
-                              :relationship
+                              :deductions,
+                              :income,
+                              :pay2, 
+                              :rate2, 
+                              :frequency2, 
+                              :hours2, 
+                              :date2,
+                              :deductions2,
                             )
     end
 end
