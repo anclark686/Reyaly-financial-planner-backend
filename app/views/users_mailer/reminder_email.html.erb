@@ -2,19 +2,60 @@
 <html>
   <head>
     <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;700&display=block" rel="stylesheet">
+    <style>
+      .expense-table {
+        margin: 20px auto;
+        text-align: center;
+        border: 2px solid black;
+        color: black;
+        border-collapse: collapse;
+      }
+      .expense-table-header {
+        font-weight: bold;
+        border: 2px solid black;
+        background-color: #1e9f63;
+        color: white;
+      }
+    </style>
   </head>
-  <body>
-    <h1>Welcome to example.com, <%= @name %> </h1>
-    <p>
-      You have successfully signed up to example.com.
-    </p>
-    <p>
-      To login to the site, just follow this link: <%= @url %>.
-    </p>
+  <body style="background-color: rgb(253, 247, 240); text-align: center; color: black; font-size: 1rem;">
+    <main>
+      <h1 class="header">Hello <%= @name %>! </h1>
+      <h3>
+        Here's your weekly expense reminder.
+      </h3>
+      <p>
+        To view a calendar of all of your expenses, <a href=<%= @url %> style="color: green;">Click Here</a>.
+      </p>
+      
+      <table class="expense-table">
+        <thead class="expense-table-header">
+          <tr>
+            <th style="width: 200px;">Expense Name</th>
+            <th style="width: 100px;">Amount</th>
+            <th style="width: 200px;">Due Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @expenses.each_with_index do |expense, index| %>
+            <% if index % 2 == 0 %>
+              <tr style="background-color: white;">
+                <td><%= expense[:name] %></td>
+                <td><%= expense[:amount] %></td>
+                <td><%= expense[:date].strftime("%A %b %e") %></td>
+              </tr>
+            <% else %>
+              <tr style="background-color: rgb(226, 246, 229);">
+                <td><%= expense[:name] %></td>
+                <td><%= expense[:amount] %></td>
+                <td><%= expense[:date].strftime("%A %b %e") %></td>
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
 
-    <p>Thanks for joining and have a great day!</p>
+      <p>Thanks for being a valued member of Reyaly Financial Planner!</p>
+    </main>
   </body>
 </html>

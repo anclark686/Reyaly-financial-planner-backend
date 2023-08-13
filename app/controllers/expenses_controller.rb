@@ -1,3 +1,6 @@
+require 'expenses_helper'
+include ExpensesHelper
+
 class ExpensesController < ApplicationController
   before_action :set_expense, only: %i[ update destroy ]
 
@@ -32,49 +35,13 @@ class ExpensesController < ApplicationController
         start_day = start_day.mday
         end_day = end_day.mday
 
-        if end_day > start_day
-          @expenses = Expense.where(
-            user: params[:user_id],
-            :date => {:$gte => start_day, :$lte => end_day}
-          ).all
-
-        else
-          @expenses1 = Expense.where(
-            user: params[:user_id],
-            :date => {:$gte => start_day, :$lte => 31}
-          ).all
-
-          @expenses2 = Expense.where(
-            user: params[:user_id],
-            :date => {:$gte => 1, :$lte => end_day}
-          ).all
-
-          @expenses = @expenses1 + @expenses2
-        end
+        @expenses = ExpensesHelper.get_basic_expenses(start_day, end_day, params[:user_id])
       end  
     else 
       start_day = Date::strptime(params[:date1], "%m/%d/%Y").mday
       end_day = Date::strptime(params[:date2], "%m/%d/%Y").mday
-      
-      if end_day > start_day
-        @expenses = Expense.where(
-          user: params[:user_id],
-          :date => {:$gte => start_day, :$lte => end_day}
-        ).all
 
-      else
-        @expenses1 = Expense.where(
-          user: params[:user_id],
-          :date => {:$gte => start_day, :$lte => 31}
-        ).all
-
-        @expenses2 = Expense.where(
-          user: params[:user_id],
-          :date => {:$gte => 1, :$lte => end_day}
-        ).all
-
-        @expenses = @expenses1 + @expenses2
-      end
+      @expenses = ExpensesHelper.get_basic_expenses(start_day, end_day, params[:user_id])
     end  
 
     render json: { data: @expenses, status: :ok, message: 'Success' }, status: :ok
