@@ -26,6 +26,8 @@ task :send_reminders => :environment do
 
       UsersMailer.with(email: user.email, name: user.username, expenses: expense_list).reminder_email.deliver_now
     end
+  else 
+    puts "Not Sunday - skipping reminder email send"
   end
 end
 
