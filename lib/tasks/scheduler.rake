@@ -5,10 +5,7 @@ include ExpensesHelper
 desc "This task is called by the Heroku scheduler add-on"
 
 task :send_reminders => :environment do
-  puts Date.today.sunday?
-  puts Date.today.saturday?
-
-  if Date.today.saturday? 
+  if Date.today.sunday? 
     @users = User.all
     for user in @users do
       start_day = DateTime.now
