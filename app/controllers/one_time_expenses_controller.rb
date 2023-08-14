@@ -3,7 +3,6 @@ class OneTimeExpensesController < ApplicationController
 
   # GET /one_time_expenses or /one_time_expenses.json
   def index
-    puts params
     @one_time_expenses = OneTimeExpense.where(paycheck_id: params[:paycheck_id]).all
     render json: { data: @one_time_expenses, status: :ok, message: 'Success' }, status: :ok
   end
@@ -15,7 +14,6 @@ class OneTimeExpensesController < ApplicationController
 
   # POST /one_time_expenses or /one_time_expenses.json
   def create
-    puts params
     @one_time_expense = OneTimeExpense.new(
                                           name: params[:name],
                                           amount: params[:amount],
@@ -33,8 +31,6 @@ class OneTimeExpensesController < ApplicationController
 
   # PATCH/PUT /one_time_expenses/1 or /one_time_expenses/1.json
   def update
-    puts params
-
     if params[:newPaycheck] == params[:paycheck]
       if @one_time_expense.update(
               name: params[:name],
