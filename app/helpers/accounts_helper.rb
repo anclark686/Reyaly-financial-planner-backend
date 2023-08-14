@@ -5,7 +5,6 @@ module AccountsHelper
 
             for num in other_accounts.length.downto(0) do
                 if other_accounts[num] != account._id 
-                    puts "other=#{other_accounts[num]} - main=#{account._id}"
                     if other_accounts[num]
                         remove_expense(other_accounts[num], i)
                         i.pull(account_ids: other_accounts[num])

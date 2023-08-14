@@ -3,7 +3,6 @@ class PaychecksController < ApplicationController
 
   # GET /paychecks or /paychecks.json
   def index
-    puts params[:id]
     @paychecks = Paycheck.where(user: params[:id]).all
     render json: { data: @paychecks, status: :ok }, status: :ok
   end

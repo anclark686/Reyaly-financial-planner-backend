@@ -38,7 +38,6 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1 or /accounts/1.json
   def update
-    puts params
     expenses = params[:expenses].map {|x| Expense.find_by(id: x[:id])}
 
     if @account.update({
