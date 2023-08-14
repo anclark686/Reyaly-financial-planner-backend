@@ -18,6 +18,7 @@ class UsersController < ApplicationController
       data = {
         user: @user, 
         expenses: get_expenses_list(@user.id), 
+        otExpenses: get_one_time_expenses_list(@user.id),
         paychecks: get_paychecks_list(@user.id, 1),
         paychecks2: get_paychecks_list(@user.id, 2),
         debts: get_debts_list(@user.id),
@@ -42,7 +43,7 @@ class UsersController < ApplicationController
       begin  # "try" block
         if @user.save
           UsersMailer.with(email: @user.email, name: @user.username).welcome_email.deliver_later
-          render json: { status: :created, message: 'Success', id: "#{@user.id}", next: first_paycheck}, status: :created
+          render json: { status: :created, message: 'Success', id: "#{@user.id}" }, status: :created
         else
           render json: { json: @user.errors, status: :unprocessable_entity }, status: :unprocessable_entity
         end
