@@ -295,6 +295,25 @@ module UsersHelper
         return expenses_list
     end
 
+    def get_one_time_expenses_list(user_id)
+        @one_time_expenses = OneTimeExpense.where(user: user_id).all
+
+        ot_expenses_list = []
+        for i in @one_time_expenses do
+            id = i._id.to_s
+            paycheck = i.paycheck_id.to_s
+            ot_expenses_list.append({
+                            name: i.name, 
+                            date: i.date, 
+                            amount: i.amount, 
+                            id: id, paycheck: 
+                            paycheck 
+                            })
+        end
+        
+        return ot_expenses_list
+    end
+
     def get_paychecks_list(user_id, income_src)
         @paychecks = Paycheck.where(user: user_id, income: income_src).all
 
