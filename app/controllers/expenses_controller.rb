@@ -1,6 +1,9 @@
 require 'expenses_helper'
 include ExpensesHelper
 
+require 'users_helper'
+include UsersHelper
+
 class ExpensesController < ApplicationController
   before_action :set_expense, only: %i[ update destroy ]
 
@@ -44,7 +47,12 @@ class ExpensesController < ApplicationController
       @expenses = ExpensesHelper.get_basic_expenses(start_day, end_day, params[:user_id])
     end  
 
-    render json: { data: @expenses, status: :ok, message: 'Success' }, status: :ok
+    expenses_list = []
+      for i in @expenses do
+          expenses_list.append(UsersHelper.clean_expense(i))
+      end
+
+    render json: { data: expenses_list, status: :ok, message: 'Success' }, status: :ok
   end
 
   # POST /expenses or /expenses.json
