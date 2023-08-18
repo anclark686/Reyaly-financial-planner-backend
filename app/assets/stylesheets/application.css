@@ -14,7 +14,7 @@
  *= require_self
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;400;700&display=swap');
 
 body {
   margin: 0px;
@@ -30,10 +30,12 @@ h6,
 p {
   margin: 0px;
 }
+
 a {
   text-decoration: none;
   color: #1e9f63;
 }
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -43,8 +45,7 @@ a {
 
 .pic-header {
   min-height: 200px;
-  background:
-    linear-gradient(rgba(252, 251, 251, 1), rgba(0, 0, 0, 0.2)),
+  background: linear-gradient(rgba(252, 251, 251, 1), rgba(0, 0, 0, 0.2)),
     url("assets/money.jpg") center calc(50% - 20%) / cover;
 }
 
@@ -57,7 +58,7 @@ a {
   color: white;
   font-size: 24px;
   padding: 10px;
-  font-family: "Lobster", cursive;
+  font-weight: 200;
 }
 
 .brand-header {
@@ -70,7 +71,13 @@ a {
 }
 
 .main-body {
-  margin-top: 100px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.desert-img {
+  width: 50%;
+  margin: 20px auto;
   text-align: center;
 }
 
@@ -85,7 +92,6 @@ footer {
 
 footer a:visited {
   color: white;
-
 }
 
 .social-icon {
