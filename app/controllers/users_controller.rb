@@ -38,7 +38,9 @@ class UsersController < ApplicationController
       @user = User.new(user_params)
 
       save_paychecks(user_params[:frequency], user_params[:date], @user, 1)
-      save_paychecks(user_params[:frequency2], user_params[:date2], @user, 2)
+      if params[:income] > 1
+        save_paychecks(user_params[:frequency2], user_params[:date2], @user, 2)
+      end
 
       begin  # "try" block
         if @user.save
