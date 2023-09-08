@@ -21,6 +21,7 @@ class UsersController < ApplicationController
         otExpenses: get_one_time_expenses_list(@user.id),
         paychecks: get_paychecks_list(@user.id, 1),
         paychecks2: get_paychecks_list(@user.id, 2),
+        saved_paychecks: get_saved_paychecks_list(@user.id),
         debts: get_debts_list(@user.id),
         accounts: get_accounts_list(@user.id)
       }

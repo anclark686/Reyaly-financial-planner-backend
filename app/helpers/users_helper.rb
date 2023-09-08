@@ -306,8 +306,8 @@ module UsersHelper
                             name: i.name, 
                             date: i.date, 
                             amount: i.amount, 
-                            id: id, paycheck: 
-                            paycheck 
+                            id: id, 
+                            paycheck: paycheck 
                             })
         end
         
@@ -324,6 +324,29 @@ module UsersHelper
         end
 
         return paychecks_list
+    end
+
+    def get_saved_paychecks_list(user_id)
+        @saved_paychecks = SavedPaycheck.where(user: user_id).all
+
+        # saved_paychecks_list = []
+        saved_paycheck_hash = {}
+        for i in @saved_paychecks do
+            id = i._id.to_s
+
+            # saved_paychecks_list.append({i.paycheck_id.to_s => {
+            #                 date: i.date, 
+            #                 id: id, 
+            #                 expenses: i.expenses,
+            #                 }})
+            saved_paycheck_hash[i.paycheck_id.to_s] = {
+                                date: i.date, 
+                                id: id, 
+                                expenses: i.expenses,
+                                }
+        end
+
+        return saved_paycheck_hash
     end
 
     def get_debts_list(user_id)
