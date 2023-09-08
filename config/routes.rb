@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
     resources :paychecks, only: [:index] do
       resources :one_time_expenses, only: [:index, :create, :update, :destroy]
+      resources :saved_paychecks, only: [:index, :create, :update, :destroy]
     end
   end
 end
